@@ -41,7 +41,7 @@ const Review = () => {
         <img src={image} alt={name} />
       </div>
       <h4 className="name">{name}</h4>
-      <p>{job}</p>
+      <p className="job">{job}</p>
       <p className="info">{text}</p>
       <div className="btn-arrows">
         <FiArrowLeftCircle className="btn" onClick={handleBack} />
