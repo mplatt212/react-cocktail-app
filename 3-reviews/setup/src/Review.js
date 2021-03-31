@@ -1,65 +1,57 @@
-import React, { useState } from 'react';
-import people from './data';
-import { FaChevronLeft, FaChevronRight, FaQuoteRight } from 'react-icons/fa';
+import React, { useState } from "react";
+import people from "./data";
+import { FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
+import { FaQuoteRight } from "react-icons/fa";
 
 const Review = () => {
-      const [index,setIndex] = useState(0);
-      const {name,job,image,text} = people[index];
+  const [index, setIndex] = useState(0);
+  const { id, name, job, image, text } = people[index];
 
-      const checkNumber = (number) => {
-        if(number > people.length - 1){
-          return 0;
-        }
-        if(number < 0) {
-          return people.length - 1;
-        }
-        return number;
-      }
+  const checkNum = (num) => {
+    if (num < 0) {
+      setIndex(people.length - 1);
+    } else if (num > people.length - 1) {
+      setIndex(0);
+    } else if (num == index) {
+      setIndex(num + 1);
+    } else {
+      setIndex(num);
+    }
+  };
 
-      const nextPerson = () => {
-        setIndex((index) => {
-          let newIndex = index + 1;
-          return checkNumber(newIndex);
-        })
-      }
+  const handleBack = () => {
+    checkNum(index - 1);
+  };
 
-      const prevPerson = () => {
-        setIndex((index) => {
-          let newIndex = index - 1;
-          return checkNumber(newIndex);
-        })
-      }
+  const handleForward = () => {
+    checkNum(index + 1);
+  };
 
-      const randomPerson = () => {
-        let randomNumber = Math.floor(Math.random() * people.length);
-        if(randomNumber === index){
-          randomNumber = index + 1;
-        }
-        setIndex(checkNumber(randomNumber));
-      }
+  const handleRandom = () => {
+    let randNum = Math.floor(Math.random() * people.length - 1);
+    checkNum(randNum);
+  };
 
-  return <>
-    <article className="review">
+  return (
+    <article className="section-review" key={id}>
       <div className="img-container">
-        <img src={image} alt={name} className="person-img" />
-        <span className="quote-icon">
+        <div className="quote">
           <FaQuoteRight />
-        </span>
+        </div>
+        <img src={image} alt={name} />
       </div>
-      <h4 className="author">{name}</h4>
-      <p className="job">{job}</p>
+      <h4 className="name">{name}</h4>
+      <p>{job}</p>
       <p className="info">{text}</p>
-      <div className="button-container">
-        <button className="prev-btn" onClick={prevPerson}>
-          <FaChevronLeft />
-        </button>
-        <button className="next-btn" onClick={nextPerson}>
-          <FaChevronRight />
-        </button>
+      <div className="btn-arrows">
+        <FiArrowLeftCircle className="btn" onClick={handleBack} />
+        <FiArrowRightCircle className="btn" onClick={handleForward} />
       </div>
-      <button className="random-btn" onClick={randomPerson}>Surprise Me!</button>
+      <button className="btn-surprise" onClick={handleRandom}>
+        Surprise Me
+      </button>
     </article>
-  </>;
+  );
 };
 
 export default Review;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Tour from "./Tour";
+import NoTours from "./NoTours";
 import Loading from "./Loading";
 
 const url = "https://course-api.com/react-tours-project";
@@ -37,7 +38,7 @@ const App = () => {
     <section id="section-main">
       <h1>Our Tours</h1>
       <div className="line"></div>
-      {!tours.length && "No tours available!"}
+      {!tours.length && <NoTours />}
       {tours.map((tour) => {
         return (
           <Tour
