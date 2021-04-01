@@ -1,40 +1,43 @@
-import React, {useState} from 'react';
-import items from './data';
-import Categories from './Categories';
-import Menu from './Menu';
+import React, { useState } from "react";
+import Categories from "./Categories";
+import items from "./data";
+import Menu from "./Menu";
 
-const allCategories = ['All', ...new Set(items.map((item)=>item.category))]
+const App = () => {
+  const [menuItems, setMenuItems] = useState(items);
 
-function App() {
-  const [menuItems,setMenuItems] = useState(items)
-  const [category,setCategory] = useState(allCategories)
+  const newCategories = [
+    "All",
+    ...new Set(
+      items.map((item) => {
+        return item.category;
+      })
+    ),
+  ];
 
-const filterCategories = (category) => {
-  if(category == 'All') {
-    setMenuItems(items)
-    return;
-  }
+  const filterCategories = (category) => {
+    if (category === "All") {
+      setMenuItems(items);
+    } else {
+      const newMenu = items.filter((item) => {
+        return item.category === category;
+      });
+      setMenuItems(newMenu);
+    }
+  };
 
-  const newItems = items.filter((item) => 
-    category == item.category
-  )
-  setMenuItems(newItems)
-}
-
-  return <>
-    <main>
-      <header>
-        <h2 className="title">Our Menu</h2>
-        <div className="underline"></div>
-      </header>
-      <nav>
-        <Categories allCategories={allCategories} filterCategories={filterCategories} />
-      </nav>
-      <article className="article-menu">
-        <Menu menuItems={menuItems} />
+  return (
+    <section>
+      <Categories
+        newCategories={newCategories}
+        filterCategories={filterCategories}
+      />
+      ;
+      <article className="menu-grid">
+        <Menu items={menuItems} />
       </article>
-    </main>
-  </>
-}
+    </section>
+  );
+};
 
 export default App;

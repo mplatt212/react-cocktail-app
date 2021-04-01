@@ -1,13 +1,27 @@
-import React from 'react';
+import React from "react";
 
-function Categories({allCategories,filterCategories}) {
-  return <>
-    {allCategories.map((category)=>{
-      return <>
-        <button className="btn btn-primary btn-category" onClick={()=>filterCategories(category)}>{category}</button>
-      </>
-    })}
-  </>
-}
+const Categories = ({ items, newCategories, filterCategories }) => {
+  return (
+    <section className="section-nav">
+      <header className="nav-header">
+        <h1>Our Menu</h1>
+        <div className="underline"></div>
+      </header>
+      <nav>
+        {newCategories.map((category, index) => {
+          return (
+            <button
+              className="btn-category"
+              onClick={() => filterCategories(category)}
+              key={index}
+            >
+              {category}
+            </button>
+          );
+        })}
+      </nav>
+    </section>
+  );
+};
 
 export default Categories;
