@@ -1,66 +1,62 @@
-import React, { useState, useEffect } from 'react'
-import { FaAngleDoubleRight } from 'react-icons/fa'
+import React, { useState, useEffect } from "react";
+import Nav from "./Nav";
+import Details from "./Details";
+import Loading from "./Loading";
 // ATTENTION!!!!!!!!!!
 // I SWITCHED TO PERMANENT DOMAIN
-const url = 'https://course-api.com/react-tabs-project'
-function App() {
-  const [loading,setLoading] = useState(true);
-  const [jobs,setJobs] = useState([]);
-  const [value,setValue] = useState(0);
+const url = "https://course-api.com/react-tabs-project";
 
-  const fetchJobs = async () => {
+const App = () => {
+  const [people, setPeople] = useState([]);
+  const [details, setDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const filterPeople = (id) => {
+    const newDetails = people.filter((person) => {
+      return person.id === id;
+    });
+    setDetails(newDetails);
+  };
+
+  const fetchData = async () => {
     try {
-      const response = await fetch(url);
-      const newJobs = await response.json();
-      setJobs(newJobs);
+      const resp = await fetch(url);
+      const data = await resp.json();
+      setPeople(data);
+      setDetails(data);
       setLoading(false);
-    }
-    catch(error) {
-      setLoading(false);
+    } catch (error) {
       console.log(error);
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchJobs();
-  }, [])
+    fetchData();
+  }, []);
 
-  if(loading) {
-    return <>
-      <h2>Loading...</h2>
-    </>
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <Loading />;
+      </div>
+    );
   }
 
-  const {company,dates,duties,title} = jobs[value];
-
-  return <>
-    <section className="section">
-      <div className="title">
-        <h2>Experience</h2>
-        <div className="underline"></div>
-      </div>
-      <div className="jobs-center">
-        <div className="btn-container">
-          {jobs.map((job,index) => {
-            return <>
-              <button key={job.id} onClick={()=>setValue(index)}>{job.company}</button>
-            </>
-          })}
-        </div>
-        <article className="job-info">
-          <h3>{title}</h3>
-          <h4>{company}</h4>
-          <p className='job-date'>{dates}</p>
-          {duties.map((duty) => {
-            return <>
-              <FaAngleDoubleRight className='job-icon'></FaAngleDoubleRight>
-              <p>{duty}</p>
-            </>
-          })}
+  return (
+    <section className="section-main">
+      <h1>Experience</h1>
+      <div className="underline"></div>
+      <section className="grid">
+        <article className="nav">
+          <Nav people={people} filterPeople={filterPeople} details={details} />
         </article>
-      </div>
+        <article className="details">
+          <Details details={details} />
+        </article>
+      </section>
     </section>
-  </>
-}
+  );
+};
 
-export default App
+export default App;
