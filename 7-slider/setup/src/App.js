@@ -16,18 +16,18 @@ function App() {
     }
   }, [people, index]);
 
-  const indexPlus = () => {
-    setIndex(index + 1);
-  };
-
-  const indexMinus = () => {
-    setIndex(index - 1);
-  };
+  // useEffect(() => {
+  //   const timeOut = setTimeout(() => {
+  //     setIndex(index + 1);
+  //   }, 3000);
+  //   return () => clearInterval(timeOut);
+  // }, [index]);
 
   const setClass = (position) => {
     if (position === index) {
       return "person-current";
-    } else if (
+    }
+    if (
       position === index - 1 ||
       (position === people.length - 1 && index === 0)
     ) {
@@ -43,15 +43,18 @@ function App() {
         <h1>/Reviews</h1>
       </header>
       <article className="carousel">
-        <button className="buttons btn-left" onClick={indexMinus}>
+        <button
+          className="buttons btn-left"
+          onClick={() => setIndex(index - 1)}
+        >
           <FiChevronLeft />
         </button>
 
         {people.map((person, personIndex) => {
-          const { image, name, title, quote } = person;
+          const { id, image, name, title, quote } = person;
 
           return (
-            <section className={setClass(personIndex)} key={personIndex}>
+            <section className={setClass(personIndex)} key={id}>
               <img src={image} alt={name} />
               <h4>{name}</h4>
               <h5>{title}</h5>
@@ -62,7 +65,10 @@ function App() {
             </section>
           );
         })}
-        <button className="buttons btn-right" onClick={indexPlus}>
+        <button
+          className="buttons btn-right"
+          onClick={() => setIndex(index + 1)}
+        >
           <FiChevronRight />
         </button>
       </article>
