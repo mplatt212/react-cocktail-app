@@ -141,6 +141,7 @@ header h1 {
   display: flex;
   justify-content: space-between;
   position: relative;
+  overflow: hidden;
 }
 
 .carousel h4 {
