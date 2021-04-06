@@ -1,27 +1,25 @@
-import React from 'react'
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import React from "react";
+import { BiEdit } from "react-icons/bi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
-function List({list,removeItem,editItem}) {
-
-    return <>
-        {list.map((item) => {
-            const {id,title} = item;
-
-            return<>
-            <article className="list-item" key={id}>
-                <p className="item-name">{title}</p>
-                <div className="icons">
-                    <button className="edit" onClick={()=>editItem(id)}>
-                        <FaEdit />
-                    </button>
-                    <button className="trash" onClick={()=>removeItem(id)}>
-                        <FaTrash />
-                    </button>
-                </div>
-            </article>
-            </>
-        })}
-        </>
-}
+const List = ({ listItem, handleRemove }) => {
+  console.log(listItem);
+  return (
+    <article className="list">
+      <p className="list-item">{listItem.item}</p>
+      <div className="btn-container">
+        <button className="btn-edit">
+          <BiEdit />
+        </button>
+        <button
+          className="btn-remove"
+          onClick={() => handleRemove(listItem.id)}
+        >
+          <RiDeleteBin6Line />
+        </button>
+      </div>
+    </article>
+  );
+};
 
 export default List;

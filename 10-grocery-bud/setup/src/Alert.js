@@ -1,18 +1,23 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from "react";
 
-function Alert({alert, list,removeAlert}) {
-    const {msg,type} = alert;
+const Alert = ({ alertStatus, showAlert }) => {
+  const { type, msg } = alertStatus;
 
-    useEffect(() => {
-        const timeout = setInterval(() => {
-            removeAlert();
-        },3000)
-        return () => clearInterval(timeout)
-    },[list])
+  useEffect(() => {
+    const alertTimeout = setTimeout(() => {
+      showAlert("", "", false);
+    }, 3000);
 
-    return <>
-        <p className={`alert alert-${type}`}>{msg}</p>
-    </>
-}
+    return () => {
+      clearTimeout(alertTimeout);
+    };
+  }, [alertStatus, showAlert]);
 
-export default Alert
+  return (
+    <div className={type}>
+      <h4>{msg}</h4>
+    </div>
+  );
+};
+
+export default Alert;

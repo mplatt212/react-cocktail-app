@@ -1,96 +1,72 @@
-import React, {useState} from 'react'
-import List from './List'
-import Alert from './Alert'
+import React, { useState } from "react";
+import List from "./List";
+import Alert from "./Alert";
 
 const App = () => {
-  const [list,setList] = useState([])
-  const [itemName,setItemName] = useState('')
-  const [alert,setAlert] = useState({show:false,type:'',msg:''})
-  const [editMode,setEditMode] = useState(false)
-  const [editID,setEditID] = useState(null)
+  const [item, setItem] = useState("");
+  const [list, setList] = useState([]);
+  const [alertStatus, setAlertStatus] = useState({
+    type: "",
+    msg: "",
+    show: false,
+  });
+
+  const showAlert = (type = "", msg = "", show = false) => {
+    setAlertStatus({ type, msg, show });
+  };
+
+  const handleRemove = (listId) => {
+    const newList = list.filter((item) => listId !== item.id);
+    setAlertStatus({
+      type: "danger",
+      msg: "You have successfully removed the item.",
+      show: true,
+    });
+    setList(newList);
+  };
+
+  const handleClear = () => {
+    setList([]);
+    list.length && showAlert("danger", "All items cleared from list.", true);
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if(!itemName) {
-      return null;
-    }
-    else if(itemName && editMode) {
-      const newList = list.map((item) => {
-        if(item.id == editID){
-          return {...item,title: itemName}
-        }
-        return item
-      })
-      setList(newList)
-      setItemName('')
-      setEditID(null)
-      setEditMode(false)
-      showAlert(true,'success','Edit successful.')
-    }
-    else {
-      const newItem = {id: new Date().getTime().toString(), title: itemName}
-      setList([...list,newItem])
-      setItemName('')
-      showAlert(true,'success','Item added.')
-    }
-    
-  }
+    setList([{ id: new Date().getTime().toString(), item: item }, ...list]);
+    setItem("");
+    showAlert("success", "You have successfully added the item.", true);
+  };
+  return (
+    <section className="container">
+      <h1>Grocery List</h1>
+      {alertStatus.show && (
+        <Alert alertStatus={alertStatus} showAlert={showAlert} />
+      )}
 
-  const showAlert = (show=false,type='',msg='') => {
-    setAlert({show,type,msg})
-  }
-
-  const removeItem = (id) => {
-      const newList = list.filter((item) => 
-        item.id !== id
-      )
-      setList(newList)
-      showAlert(true,'danger','Item removed.')
-  }
-
-  const clearAll = () => {
-    setList([])
-    showAlert(true,'danger','All items removed.')
-  }
-
-  const editItem = (id) => {
-    setEditMode(!editMode)
-    const specificItem = list.find((item) => 
-      id == item.id
-    )
-    setItemName(specificItem.title)
-    setEditID(id)
-  }
-
-  return <>
-    <main>
-      <header>
-        <h2 className="title">Grocery Cart</h2>
-        {alert.show && <Alert alert={alert} list={list} removeAlert={showAlert} />}
-      </header>
-      <section>
-        <form action="" className="form-inline">
-          <input 
-            type="text"
-            placeholder='Eggs...'
-            className='form-control'
-            value={itemName}
-            onChange={(e)=>{setItemName(e.target.value)}}
-          />
-          <button 
-            type='submit'  
-            className="btn btn-primary btn-submit"
-            onClick={handleSubmit}
-            >{editMode ? 'Edit' : 'Submit'}
-          </button>
-        </form>
-        <List list={list} removeItem={removeItem} editItem={editItem} />
+      <form>
+        <input
+          type="text"
+          placeholder="Eggs"
+          value={item}
+          onChange={(e) => setItem(e.target.value)}
+        />
+        <button type="submit" onClick={handleSubmit}>
+          Submit
+        </button>
+      </form>
+      <section className="list-container">
+        {list.map((item, index) => {
+          return (
+            <List listItem={item} key={index} handleRemove={handleRemove} />
+          );
+        })}
+        <button className="btn-clear" onClick={handleClear}>
+          Clear All
+        </button>
       </section>
-      {list.length > 0 && <button className="btn btn-danger clear-all" onClick={()=>clearAll()}>Clear All</button>}
-    </main>
+    </section>
+  );
+};
 
-  </>
-}
-
-export default App
+export default App;
