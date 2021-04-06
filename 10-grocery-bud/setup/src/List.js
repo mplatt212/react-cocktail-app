@@ -2,13 +2,12 @@ import React from "react";
 import { BiEdit } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
-const List = ({ listItem, handleRemove }) => {
-  console.log(listItem);
+const List = ({ listItem, handleRemove, handleEdit }) => {
   return (
     <article className="list">
       <p className="list-item">{listItem.item}</p>
       <div className="btn-container">
-        <button className="btn-edit">
+        <button className="btn-edit" onClick={() => handleEdit(listItem.id)}>
           <BiEdit />
         </button>
         <button

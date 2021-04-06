@@ -5,6 +5,8 @@ import Alert from "./Alert";
 const App = () => {
   const [item, setItem] = useState("");
   const [list, setList] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
   const [alertStatus, setAlertStatus] = useState({
     type: "",
     msg: "",
@@ -13,6 +15,14 @@ const App = () => {
 
   const showAlert = (type = "", msg = "", show = false) => {
     setAlertStatus({ type, msg, show });
+  };
+
+  const handleEdit = (id) => {
+    setEditMode(true);
+    const editItem = list.filter((item) => id === item.id);
+    setItem(editItem[0].item);
+    setEditId(editItem[0].id);
+    showAlert("edit", "Edit selected item.", true);
   };
 
   const handleRemove = (listId) => {
@@ -32,10 +42,23 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    setList([{ id: new Date().getTime().toString(), item: item }, ...list]);
-    setItem("");
-    showAlert("success", "You have successfully added the item.", true);
+    if (item && !editMode) {
+      setList([{ id: new Date().getTime().toString(), item: item }, ...list]);
+      setItem("");
+      showAlert("success", "You have successfully added the item.", true);
+    }
+    if (item && editMode) {
+      const newList = list.map((listItem) => {
+        if (editId === listItem.id) {
+          return { ...listItem, item: item };
+        }
+        return listItem;
+      });
+      setList(newList);
+      setItem("");
+      setEditMode(false);
+      showAlert("success", "You have successfully edited the item.", true);
+    }
   };
   return (
     <section className="container">
@@ -58,10 +81,15 @@ const App = () => {
       <section className="list-container">
         {list.map((item, index) => {
           return (
-            <List listItem={item} key={index} handleRemove={handleRemove} />
+            <List
+              listItem={item}
+              key={index}
+              handleRemove={handleRemove}
+              handleEdit={handleEdit}
+            />
           );
         })}
-        <button className="btn-clear" onClick={handleClear}>
+        <button id="btn-clear" onClick={handleClear}>
           Clear All
         </button>
       </section>
