@@ -1,10 +1,36 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { FaBars, FaTwitter } from 'react-icons/fa'
-import { links, social } from './data'
-import logo from './logo.svg'
+import React, { useState, useRef, useEffect } from "react";
+import { FaBars, FaTwitter } from "react-icons/fa";
+import { links, social } from "./data";
+import logo from "./logo.svg";
 
 const Navbar = () => {
-  return <h4>navbar</h4>
-}
+  return (
+    <nav>
+      <div className="logo">
+        <img src={logo} alt="logo" />
+      </div>
+      <div className="nav-links">
+        <ul className="links-list">
+          {links.map((link) => {
+            return (
+              <li key={link.id}>
+                <a href={link.url}>{link.text}</a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="social">
+        {social.map((singleIcon) => {
+          return (
+            <span className="icons" key={singleIcon.id}>
+              <a href={singleIcon.url}>{singleIcon.icon}</a>
+            </span>
+          );
+        })}
+      </div>
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;
