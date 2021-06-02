@@ -185,3 +185,49 @@ nav {
 .icons a:hover {
   color: var(--clr-primary-4);
 }
+
+#nav-toggle {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  nav {
+    display: block;
+  }
+
+  .logo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  #nav-toggle {
+    transition: all 0.5s ease;
+    display: inline;
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: none;
+  }
+
+  #nav-toggle:hover {
+    cursor: pointer;
+    transition: all 0.5s ease;
+    transform: rotate(90deg);
+  }
+
+  #nav-toggle:focus {
+    outline: none;
+  }
+
+  .links-list {
+    display: block;
+  }
+
+  .links-list li {
+    margin-bottom: 0.25rem;
+  }
+
+  .social {
+    display: none;
+  }
+}
